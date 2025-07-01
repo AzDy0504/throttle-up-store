@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Throttle Up Accesoriez - Online Store</title>
+  <script src="https://js.yoco.com/sdk/v1/yoco-sdk-web.js"></script>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; color: #333; }
     header, footer { background: #111; color: #fff; text-align: center; padding: 1rem; }
@@ -124,10 +125,23 @@
         alert('Your cart is empty!');
         return;
       }
-      const itemList = cart.map(item => `${item.name} - R${item.price}`).join('\n');
-      alert(`Checkout request sent!\n\nItems:\n${itemList}\n\nTotal: R${cart.reduce((sum, item) => sum + item.price, 0)}`);
-      cart = [];
-      updateCart();
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      const yoco = new window.YocoSDK({ publicKey: 'pk_test_1d229d90GNq23qVfa2e4' });
+      const checkoutSession = yoco.inline({
+        amountInCents: total * 100,
+        currency: 'ZAR',
+        name: 'Throttle Up Accesoriez',
+        description: 'Biking Accessories Order',
+        callback: function (result) {
+          if (result.error) {
+            alert('Payment failed: ' + result.error.message);
+          } else {
+            alert('Payment successful! Token: ' + result.id);
+            window.location.href = 'thank-you.html';
+          }
+        }
+      });
+      checkoutSession.open();
     }
   </script>
 </body>
