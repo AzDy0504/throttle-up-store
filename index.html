@@ -126,7 +126,7 @@
         return;
       }
       const total = cart.reduce((sum, item) => sum + item.price, 0);
-      const yoco = new window.YocoSDK({ publicKey: 'pk_test_1d229d90GNq23qVfa2e4' });
+      const yoco = new window.YocoSDK({ publicKey: 'pk_live_5422d594GNq23qVc0e84' });
       const checkoutSession = yoco.inline({
         amountInCents: total * 100,
         currency: 'ZAR',
